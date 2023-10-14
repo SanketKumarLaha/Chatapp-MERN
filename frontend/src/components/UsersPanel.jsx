@@ -11,7 +11,7 @@ const UsersPanel = () => {
   const { users } = useUsersContext();
   const { user, dispatch } = useAuthContext();
   const { clickedUser } = useClickedUserContext();
-  const clickedUserLength = Object.keys(clickedUser).length;
+  const clickedUserLength = clickedUser.length;
 
   const [searchUser, setSearchUser] = useState("");
   const showUsersDialog = useRef(null);
@@ -21,8 +21,6 @@ const UsersPanel = () => {
   const { conversations, setConversations } = useConversationsContext();
   const [otherUsers, setOtherUsers] = useState([]);
   const [filteredOtherUsers, setFilteredOtherUsers] = useState([]);
-
-  console.log({ conversations });
 
   // filtering Conversations 👍
   useEffect(() => {

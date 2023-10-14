@@ -23,10 +23,11 @@ const ChatPanel = () => {
 
   const { setConversations } = useConversationsContext();
 
-  const clickedUserId = clickedUser._id;
+  const clickedUserId = clickedUser;
   const userId = user.newUser._id;
 
-  const clickedUserLength = Object.keys(clickedUser).length;
+  const clickedUserLength = clickedUser.length;
+  const [clickedUserDetails, setClickedUserDetails] = useState("");
 
   const showLastMessage = useRef(null);
 
@@ -39,7 +40,7 @@ const ChatPanel = () => {
 
   // when clicked back setting the clickedUser context state to empty 👍
   const goBack = () => {
-    setClickedUser({});
+    setClickedUser("");
   };
 
   // getting all the messages of the user 👍
@@ -177,13 +178,26 @@ const ChatPanel = () => {
     setMessage("");
   };
 
-  // showing chatpanel on some conditions 👍
-  // const [clickedUserLength, setClickedUserLength] = useState(
-  //   Object.keys(clickedUser).length
-  // );
-  // useEffect(() => {
-  //   setClickedUserLength(Object.keys(clickedUser).length);
-  // }, [clickedUser]);
+  useEffect(() => {
+    const fetchAllOtherUsers = async () => {
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "/api/users/getUser",
+        {
+          method: "POST",
+          body: JSON.stringify({ userId: clickedUserId }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      const json = await response.json();
+      if (response.status === 200) {
+        setClickedUserDetails(json);
+      }
+    };
+    fetchAllOtherUsers();
+  }, [clickedUserId, dispatch, user.token]);
 
   return !clickedUserLength ? (
     <div
@@ -207,14 +221,16 @@ const ChatPanel = () => {
             className="bg-[image:var(--display-pic)] bg-cover w-10 h-10 border-2 border-third-color rounded-full bg-red-400"
             style={{
               "--display-pic": `url('${
-                clickedUser?.profilePic
-                  ? clickedUser.profilePic
+                clickedUserDetails?.profilePic
+                  ? clickedUserDetails.profilePic
                   : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
               }')`,
             }}
           ></div>
           <div className="pl-3 ">
-            <h1 className="font-semibold text-lg">{clickedUser?.username}</h1>
+            <h1 className="font-semibold text-lg">
+              {clickedUserDetails?.username}
+            </h1>
           </div>
         </div>
         <div>{/* <MoreVertical /> */}</div>

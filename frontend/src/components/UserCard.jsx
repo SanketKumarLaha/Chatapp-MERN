@@ -21,10 +21,13 @@ const UserCard = ({ conversation }) => {
     return formattedTime;
   };
 
+  const [otherUserId, setOtherUserId] = useState("");
+
   useEffect(() => {
     const filteredConversations = participants.filter(
       (item) => item !== userId
     );
+    setOtherUserId(filteredConversations.flat()[0]);
     const fetchAllOtherUsers = async () => {
       const response = await fetch(
         process.env.REACT_APP_BACKEND_URL + "/api/users/getUser",
@@ -52,7 +55,7 @@ const UserCard = ({ conversation }) => {
 
   const handleClick = () => {
     console.log({ userDetails });
-    setClickedUser(userDetails);
+    setClickedUser(otherUserId);
     setSelectedConversion(conversation);
     console.log({ conversation });
   };
