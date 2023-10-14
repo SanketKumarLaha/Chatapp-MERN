@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 
 const AppLayout = () => {
   return (
-    <div className="w-screen h-screen overflow-hidden">
+    <div className="w-[100svw] h-[100svh] overflow-hidden">
       <Navbar />
       <Outlet />
     </div>
