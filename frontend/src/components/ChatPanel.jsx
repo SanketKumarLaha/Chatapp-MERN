@@ -27,7 +27,6 @@ const ChatPanel = () => {
   const userId = user.newUser._id;
 
   const clickedUserLength = Object.keys(clickedUser).length;
-  console.log({ clickedUserId });
 
   const showLastMessage = useRef(null);
 
@@ -96,7 +95,6 @@ const ChatPanel = () => {
                 text: newMessage.message,
                 sender: newMessage.sender,
               },
-              createdAt: new Date(),
             };
           }
           return item;
@@ -137,6 +135,8 @@ const ChatPanel = () => {
     );
     const newMessage = await response.json();
 
+    console.log("after sending", newMessage);
+
     if (response.status !== 200) {
       alert("Your token has been expired, login again");
       dispatch({ type: "LOGOUT" });
@@ -155,7 +155,7 @@ const ChatPanel = () => {
               text: newMessage.message,
               sender: newMessage.sender,
             },
-            createdAt: new Date(),
+            updatedAt: newMessage.updatedAt,
           };
         }
         if (item._id === -1) {
@@ -166,7 +166,7 @@ const ChatPanel = () => {
               text: newMessage.message,
               sender: newMessage.sender,
             },
-            createdAt: new Date(),
+            updatedAt: newMessage.updatedAt,
           };
         }
         return item;
@@ -223,8 +223,7 @@ const ChatPanel = () => {
       <div className="w-full h-[calc(100%-8.5rem)] relative flex flex-col overflow-y-auto  overflow-x-hidden">
         {showChatMessages.length ? (
           showChatMessages.map((item, index) => {
-            console.log({ item });
-            const date = new Date(item.createdAt || item.time);
+            const date = new Date(item.updatedAt);
             const formattedTime = format(date, "h:mmaaa");
             return (
               <div

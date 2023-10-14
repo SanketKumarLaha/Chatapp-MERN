@@ -22,6 +22,8 @@ const UsersPanel = () => {
   const [otherUsers, setOtherUsers] = useState([]);
   const [filteredOtherUsers, setFilteredOtherUsers] = useState([]);
 
+  console.log({ conversations });
+
   // filtering Conversations 👍
   useEffect(() => {
     const fetchConversations = async () => {
@@ -75,8 +77,6 @@ const UsersPanel = () => {
       return redirect("/login");
     }
   };
-
-  console.log({ otherUsers });
 
   // close allusers modal 👍
   const handleCancel = () => {
@@ -170,7 +170,7 @@ const UsersPanel = () => {
               />
               <div
                 key={item._id}
-                className="flex justify-center items-center flex-col ml-4"
+                className="flex justify-center flex-col ml-4 w-2/3 break-words"
               >
                 <h1 className="text-lg font-semibold">{item.username}</h1>
               </div>

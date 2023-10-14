@@ -11,7 +11,7 @@ export const SocketContextProvider = ({ children }) => {
   console.log({ user });
 
   useEffect(() => {
-    const socket = io("http://localhost:4000", {
+    const socket = io(process.env.REACT_APP_BACKEND_URL, {
       query: {
         userId: user?.newUser._id,
       },

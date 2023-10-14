@@ -50,8 +50,8 @@ const Login = () => {
   if (user) return <Navigate to="/" replace={true} />;
 
   return (
-    <div className="w-screen h-screen bg-primary-color text-third-color flex justify-center items-center font-poppins">
-      <div className="w-3/5 sm:max-w-[25rem] p-5 bg-slate-800 rounded-2xl flex flex-col justify-center items-center ">
+    <div className="w-[100svw] h-[100svh] bg-primary-color text-third-color flex justify-center items-center font-poppins">
+      <div className="w-4/5 max-w-[23rem] sm:max-w-[25rem] sm:w-1/2 p-7 bg-slate-800 rounded-2xl flex flex-col justify-center items-center ">
         <div className="mb-5 flex flex-col items-center">
           <h1 className="text-3xl font-bold">Welcome back</h1>
           <p className="text-sm font-medium">Please enter your details</p>

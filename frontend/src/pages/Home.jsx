@@ -10,7 +10,7 @@ const Home = () => {
   if (!user) return <Navigate to="/login" replace={true} />;
 
   return (
-    <div className="w-screen h-[calc(100vh-4rem)] flex bg-gray-500 box-border">
+    <div className="w-[100svw] h-[calc(100svh-4rem)] flex bg-gray-500 box-border">
       <UsersPanel />
       <ChatPanel />
     </div>

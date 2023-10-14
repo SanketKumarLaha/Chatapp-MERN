@@ -12,11 +12,11 @@ const UserCard = ({ conversation }) => {
   const { user, dispatch } = useAuthContext();
   const userId = user?.newUser._id;
 
-  const { participants, lastMessage, createdAt } = conversation;
+  const { participants, lastMessage, updatedAt } = conversation;
 
   const messageTime = () => {
-    if (createdAt === null) return;
-    const date = new Date(createdAt);
+    if (!updatedAt) return;
+    const date = new Date(updatedAt);
     const formattedTime = format(date, "h:mmaaa");
     return formattedTime;
   };
@@ -60,7 +60,7 @@ const UserCard = ({ conversation }) => {
   return (
     <div
       onClick={handleClick}
-      className="h-20 px-3 bg-primary-color border-b border-slate-700 hover:bg-slate-800 cursor-pointer text-third-color"
+      className="h-20 bg-primary-color border-b border-slate-700 hover:bg-slate-800 cursor-pointer text-third-color"
     >
       <div className="flex items-center px-5 h-full rounded-fullr ">
         <div className="w-10/12 flex">
@@ -74,9 +74,9 @@ const UserCard = ({ conversation }) => {
               }')`,
             }}
           />
-          <div className="flex justify-between flex-col ml-4">
+          <div className="flex w-2/3 justify-between flex-col ml-4 truncate">
             <h1 className="text-lg font-semibold">{userDetails?.username}</h1>
-            <h1 className="text-xs">{lastMessage.text}</h1>
+            <h1 className="text-xs ">{lastMessage.text}</h1>
           </div>
         </div>
         <div className="w-2/12">
