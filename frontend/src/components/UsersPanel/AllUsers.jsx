@@ -1,56 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
-import UserCard from "./UserCard";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useUsersContext } from "../hooks/useUsersContext";
-import { Contact2, X } from "lucide-react";
-import { useClickedUserContext } from "../hooks/useClickedUserContext";
-import { useConversationsContext } from "../hooks/useConversationsContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { redirect } from "react-router-dom";
+import { useConversationsContext } from "../../hooks/useConversationsContext";
+import { Contact2, X } from "lucide-react";
 
-const UsersPanel = () => {
-  const { users } = useUsersContext();
+const AllUsers = () => {
   const { user, dispatch } = useAuthContext();
-  const { clickedUser } = useClickedUserContext();
-  const clickedUserLength = clickedUser.length;
-
-  const [searchUser, setSearchUser] = useState("");
-  const showUsersDialog = useRef(null);
-
-  const userId = user?.newUser._id;
-
   const { conversations, setConversations } = useConversationsContext();
+
   const [otherUsers, setOtherUsers] = useState([]);
   const [filteredOtherUsers, setFilteredOtherUsers] = useState([]);
+  const [searchUser, setSearchUser] = useState("");
 
-  // filtering Conversations 👍
+  const showUsersDialog = useRef(null);
+
   useEffect(() => {
-    const fetchConversations = async () => {
-      const response = await fetch(
-        process.env.REACT_APP_BACKEND_URL + "/api/messages/getConversations",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+    if (searchUser.length) {
+      setOtherUsers((prev) =>
+        prev.filter((item) =>
+          item.username.toLowerCase().includes(searchUser.toLowerCase())
+        )
       );
-      const json = await response.json();
+    } else {
+      setOtherUsers(filteredOtherUsers);
+    }
+  }, [searchUser, filteredOtherUsers]);
 
-      if (response.status === 200) {
-        setConversations(json);
-      } else {
-        alert("Your token has been expired, login again");
-        dispatch({ type: "LOGOUT" });
-        localStorage.removeItem("user");
-        return redirect("/login");
-      }
-    };
-
-    console.log("fetching all convos of the user");
-    fetchConversations();
-  }, [userId, setConversations, users, dispatch, user.token]);
-
-  // all users except yourself 👍
+  // all users except yourself
   const handleAllUsers = async () => {
     showUsersDialog.current.showModal();
 
@@ -76,12 +52,13 @@ const UsersPanel = () => {
     }
   };
 
-  // close allusers modal 👍
+  // close allusers modal
   const handleCancel = () => {
     showUsersDialog.current.close();
+    setSearchUser("");
   };
 
-  // open allusers modal 👍
+  // open allusers modal
   const handleUserClick = (item) => {
     let exists = false;
 
@@ -91,39 +68,21 @@ const UsersPanel = () => {
 
     const mockConvo = {
       _id: -1,
-      participants: [item._id, userId],
+      participants: [item._id, user?.newUser._id],
       lastMessage: {
         seen: false,
-        sender: userId,
+        sender: user?.newUser._id,
         text: "",
       },
       createdAt: null,
     };
 
     if (!exists) setConversations((prev) => [...prev, mockConvo]);
-
     showUsersDialog.current.close();
   };
 
-  useEffect(() => {
-    console.log({ searchUser });
-    if (searchUser.length) {
-      setOtherUsers((prev) =>
-        prev.filter((item) => item.username.toLowerCase().includes(searchUser))
-      );
-    } else {
-      setOtherUsers(filteredOtherUsers);
-    }
-  }, [searchUser, filteredOtherUsers]);
-
-  if (!conversations) return;
-
   return (
-    <div
-      className={`${
-        clickedUserLength ? "w-0" : "w-full"
-      } lg:w-1/4 h-full relative overflow-hidden box-border bg-green-500 border-r-2 border-secondary-color`}
-    >
+    <>
       <div
         className="bg-gradient-to-r from-purple-300 to-red-400 p-3 absolute bottom-5 right-5 rounded-lg cursor-pointer"
         onClick={handleAllUsers}
@@ -159,11 +118,11 @@ const UsersPanel = () => {
                 className="bg-[image:var(--display-pic)] bg-cover w-12 h-12 ml-1 rounded-full"
                 style={{
                   "--display-pic": `url(
-                '${
-                  item?.profilePic
-                    ? item?.profilePic
-                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                }')`,
+            '${
+              item?.profilePic
+                ? item?.profilePic
+                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+            }')`,
                 }}
               />
               <div
@@ -176,25 +135,8 @@ const UsersPanel = () => {
           ))}
         </div>
       </dialog>
-      {/* <div className="h-14  bg-primary-color p-2">
-        <input
-          type="text"
-          value={searchUser}
-          onChange={(e) => setSearchUser(e.target.value)}
-          placeholder="Search..."
-          className="w-full h-full p-5 rounded-lg outline-none border border-secondary-color bg-primary-color text-third-color"
-        />
-      </div> */}
-      <div className="w-full h-full overflow-auto bg-primary-color">
-        {conversations &&
-          conversations.map((conversation, index) => {
-            return (
-              <UserCard key={conversation._id} conversation={conversation} />
-            );
-          })}
-      </div>
-    </div>
+    </>
   );
 };
 
-export default UsersPanel;
+export default AllUsers;

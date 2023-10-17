@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useClickedUserContext } from "../hooks/useClickedUserContext";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useSelectedConversionContextProvider } from "../hooks/useSelectedConversionContext";
-import { format } from "date-fns";
+import { useClickedUserContext } from "../../hooks/useClickedUserContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useSelectedConversionContextProvider } from "../../hooks/useSelectedConversionContext";
+import { format, formatDistance, subDays } from "date-fns";
 import { redirect } from "react-router-dom";
 
 const UserCard = ({ conversation }) => {
@@ -16,9 +16,23 @@ const UserCard = ({ conversation }) => {
 
   const messageTime = () => {
     if (!updatedAt) return;
-    const date = new Date(updatedAt);
-    const formattedTime = format(date, "h:mmaaa");
+    // const timeText = formatDistance(new Date(updatedAt), new Date(), {
+    //   addSuffix: true,
+    // });
+    const currentDate = new Date(updatedAt);
+    const formattedTime = format(currentDate, "h:mmaaa");
     return formattedTime;
+  };
+  const messageDate = () => {
+    if (!updatedAt) return;
+
+    const currentDate = new Date(updatedAt);
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+
+    const entireDate = `${day}-${month}-${year}`;
+    return entireDate;
   };
 
   const [otherUserId, setOtherUserId] = useState("");
@@ -66,9 +80,9 @@ const UserCard = ({ conversation }) => {
       className="h-20 bg-primary-color border-b border-slate-700 hover:bg-slate-800 cursor-pointer text-third-color"
     >
       <div className="flex items-center px-5 h-full rounded-fullr ">
-        <div className="w-10/12 flex">
+        <div className="w-9/12 flex">
           <div
-            className="bg-[image:var(--display-pic)] bg-cover w-12 h-12 rounded-full  "
+            className="bg-[image:var(--display-pic)] bg-cover w-12 h-12 rounded-full"
             style={{
               "--display-pic": `url('${
                 userDetails?.profilePic
@@ -82,8 +96,9 @@ const UserCard = ({ conversation }) => {
             <h1 className="text-xs ">{lastMessage.text}</h1>
           </div>
         </div>
-        <div className="w-2/12">
-          <div>
+        <div className="w-3/12">
+          <div className="py-1 flex flex-col items-center justify-between">
+            <h1 className="text-xs text-slate-400 mb-1">{messageDate()}</h1>
             <h1 className="text-xs text-slate-400">{messageTime()}</h1>
           </div>
         </div>

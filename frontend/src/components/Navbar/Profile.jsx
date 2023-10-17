@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { ArrowLeft, Edit, X } from "lucide-react";
-import { useOpenSettingsContext } from "../hooks/useOpenSettingsModalContext";
-import { useOpenProfileContext } from "../hooks/useOpenProfileContext";
+import { useOpenSettingsContext } from "../../hooks/useOpenSettingsModalContext";
+import { useOpenProfileContext } from "../../hooks/useOpenProfileContext";
 import { redirect } from "react-router-dom";
 
 const Profile = () => {

@@ -10,6 +10,7 @@ import { OpenProfileContextProvider } from "./contexts/OpenProfileContextProvide
 import { SocketContextProvider } from "./contexts/SocketContextProvider";
 import { ConversationsContextProvider } from "./contexts/ConversationsContextProvider";
 import { SelectedConversionContextProvider } from "./contexts/SelectedConversionContextProvider";
+import { OnlineUsersContextProvider } from "./contexts/OnlineUsersContextProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,11 +20,13 @@ root.render(
         <OpenProfileContextProvider>
           <OpenSettingsModalContextProvider>
             <SocketContextProvider>
-              <ConversationsContextProvider>
-                <SelectedConversionContextProvider>
-                  <App />
-                </SelectedConversionContextProvider>
-              </ConversationsContextProvider>
+              <OnlineUsersContextProvider>
+                <ConversationsContextProvider>
+                  <SelectedConversionContextProvider>
+                    <App />
+                  </SelectedConversionContextProvider>
+                </ConversationsContextProvider>
+              </OnlineUsersContextProvider>
             </SocketContextProvider>
           </OpenSettingsModalContextProvider>
         </OpenProfileContextProvider>
