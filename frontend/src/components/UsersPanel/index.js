@@ -44,9 +44,13 @@ const UsersPanel = () => {
   }, [user, setConversations, users, dispatch]);
 
   useEffect(() => {
-    socket.on("online", (users) => {
+    const onlineFn = (users) => {
       setOnlineUsers(Object.keys(users));
-    });
+    };
+
+    socket.on("online", onlineFn);
+
+    return () => socket.off("online", onlineFn);
   }, [socket, setOnlineUsers]);
 
   if (!conversations) return;

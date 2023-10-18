@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useClickedUserContext } from "../../hooks/useClickedUserContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useSelectedConversionContextProvider } from "../../hooks/useSelectedConversionContext";
-import { format, formatDistance, subDays } from "date-fns";
+import { format } from "date-fns";
 import { redirect } from "react-router-dom";
 
 const UserCard = ({ conversation }) => {

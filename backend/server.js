@@ -8,6 +8,8 @@ import { server, app } from "./socket/socket.js";
 import UserRoute from "./routes/UserRoute.js";
 import MessageRoute from "./routes/MessageRoute.js";
 
+const PORT = process.env.PORT || 4000;
+
 dotenv.config();
 
 app.use(cors());
@@ -19,8 +21,8 @@ app.use("/api/messages", MessageRoute);
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    server.listen(4000, () => {
-      console.log("connected to db and listening on port", 4000);
+    server.listen(PORT, () => {
+      console.log("connected to db and listening on port", PORT);
     });
   })
   .catch((error) => {
